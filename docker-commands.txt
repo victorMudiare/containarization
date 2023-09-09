@@ -1,0 +1,83 @@
+# After logging into the machine & doing sudo su to become super user, make your own directory
+mkdir YOUR_OWN_DIRECTORY
+
+# Move inside your directory
+cd YOUR_OWN_DIRECTORY
+
+# check if your are in your directory or not. You can use pwd command to check your current directory
+# make sure you are in the directory for example /home/ubuntu/YOUR_OWN_DIRECTORY
+pwd
+
+#clone the containerization repository
+git clone https://github.com/HandsOnDevOpsTraining/docker-sample-ui-app.git
+
+
+# change to the docker-sample-ui-app folder where Dockerfile exists
+cd docker-sample-ui-app
+
+# check if your are in the directory where the Dockerfile exists. You can use pwd command to check your current directory
+# make sure you are in the directory for example /home/ubuntu/YOUR_OWN_DIRECTORY/docker-sample-ui-app
+pwd
+
+#Create docker image 
+docker build -t my-sample-ui:v1 .
+
+#check the image created by listing the docker images
+docker images -a
+
+#create a docker container
+docker run -p 3000:80 my-sample-ui
+
+#create a docker container with name
+docker run -p 3000:80 --name react-js-ui my-sample-ui
+
+
+#list the containers
+docker ps -a
+
+#stop the running container
+docker stop CONTAINER_ID
+
+#remove the running container
+docker rm CONTAINER_ID
+
+###############################################################################################################################################
+# Difference between docker stop and rm is explained below
+# docker stop and docker rm are two different commands in the Docker platform that are used for different purposes.
+# docker stop is used to stop a running container. When you execute the docker stop command followed by a container ID or container name, Docker sends a SIGTERM signal to the main process running inside the container, requesting it to stop gracefully. If the process does not respond to the signal within the default timeout period (10 seconds), Docker sends a SIGKILL signal, which forcefully terminates the process.
+# On the other hand, docker rm is used to remove a stopped container. When you execute the docker rm command followed by a container ID or container name, Docker removes the container from the system.
+###############################################################################################################################################
+
+# Docker command to remove the image
+docker rmi image-name
+
+#Docker Hub demo
+docker login
+docker images
+docker tag a93a249d820c handsondevops/my-sample-ui:latest
+docker push handsondevops/my-sample-ui
+docker pull handsondevops/my-sample-ui
+#endregion
+
+#region Bulk Cleanup
+#Remove all containers
+docker rm $(docker ps -a -q)
+
+#Remove all container images
+docker rmi $(docker images -q)
+#endregion
+
+
+#advanced
+docker images
+docker search --filter is-official=true httpd
+docker pull httpd
+docker image history httpd #view the layers
+docker image inspect httpd #detailed info about image
+docker run --name httpdrun -dit httpd bash
+
+# Ubuntu image example
+docker pull ubuntu
+# it option in below command is for enabling interactive mode
+docker run -it ubuntu
+cat /etc/os-release

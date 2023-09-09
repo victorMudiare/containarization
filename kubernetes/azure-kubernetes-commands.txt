@@ -1,0 +1,55 @@
+# Login to the azure cloud portal account
+az login
+
+az aks get-credentials --resource-group Kubernetes_group --name kubernetes
+
+#View service principal for cluster
+az aks get-credentials --resource-group Kubernetes_group --name kubernetes --query servicePrincipalProfile.clientId
+
+#Install kubectl then have to update path to include it
+az aks install-cli
+
+#Get basic info
+kubectl cluster-info
+kubectl get nodes
+
+# After logging into the machine & doing sudo su to become super user, make your own directory
+mkdir YOUR_OWN_DIRECTORY
+
+# Move inside your directory
+cd YOUR_OWN_DIRECTORY
+
+# check if your are in your directory or not. You can use pwd command to check your current directory
+# make sure you are in the directory for example /home/ubuntu/YOUR_OWN_DIRECTORY
+pwd
+
+#clone the containerization repository
+git clone https://github.com/HandsOnDevOpsTraining/containerization.git
+
+
+# change to the containerization folder
+cd containerization
+
+# change to the directory or folder where the my-sample-ui-deployment.yml exists
+cd kubernetes
+
+#Apply deployment
+kubectl apply -f my-sample-ui-deployment.yaml
+
+#View information
+kubectl get pods -o wide
+kubectl get pods --show-labels
+kubectl get service
+kubectl describe svc azure-my-sample-ui-web
+#note the endpoints for the frontend points to the IP of the frontend pod IP
+#this is the SERVICE in K8S, NOT the Azure Load Balancer
+kubectl get endpoints azure-my-sample-ui-web
+
+
+#General other
+kubectl get service --all-namespaces
+#delete deployment
+kubectl delete  -f my-sample-ui-deployment.yaml
+
+# If the container registry is azure cloud registry, then login to it using below command
+az acr login -n 
